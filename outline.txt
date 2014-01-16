@@ -1,0 +1,23 @@
+classes/tables:
+
+User:
+* id
+* username is unique
+* 
+
+
+
+Review:
+* id
+* author_id is foreign key to a user
+* text is a (long) String
+* Rating is an int from 1 to 5
+* cost is a number
+* num_guests is an int
+* venue_id is a foreign key to venue
+
+Venue:
+* id
+* Name is a string (will have to be unique FOR THAT CITY (check))
+* Address is a String
+* reviews is a relationships to the reviews about that venue
