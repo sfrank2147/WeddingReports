@@ -3,9 +3,6 @@ classes/tables:
 User:
 * id
 * username is unique
-* 
-
-
 
 Review:
 * id

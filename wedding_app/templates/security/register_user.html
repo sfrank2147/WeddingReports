@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}
+<title>WeddingReports - Register</title>
+{% endblock %}
+
+{% block content %}
+<form action="/handle-register" method="POST" name="register">
+    Email: {{ register_user_form.email(size=40) }} <br> <br>
+    Password: {{ register_user_form.password(size=40) }} <br> <br>
+    <input type="submit" id="submit" value="Register">
+</form>
+{% endblock %}

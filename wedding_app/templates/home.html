@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}
+<title>WeddingReports - Home</title>
+{% endblock %}
+
+{% block content %}
+{% if user and user.email %}
+Logged in as {{ user.email }}.
+{% else %}
+Not logged in.
+{% endif %}
+{% endblock %}

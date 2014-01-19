@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block title %}
+        <title>WeddingReports</title>
+        {% endblock %}
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}">
+    </head>
+    <body>
+        <div class="container">
+        <h1 id="logo">WeddingReports</h1>
+        </div>
+        <div class="navbar">
+            <div class="container">
+                <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="/login">Log In</a></li>
+                <li><a href="/register">Register</a></li>
+
+                </ul>
+            </div>
+        </div>
+        
+        <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for flash_message in messages %}
+                    <p class="flashed-message">{{ flash_message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        </div>
+        
+        <div id="content" class="container">
+        {% block content %}
+        {% endblock %}
+        </div>
+        
+        <script src="{{ url_for('static',filename='js/jquery.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+
+    </body>
+</html>
