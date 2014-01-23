@@ -2,6 +2,7 @@ from wedding_app import db, app, user_datastore
 from models import User
 from flask.ext.security.utils import encrypt_password
 import pdb
+import hashlib
 
 
 def create_user(email, password):
@@ -9,7 +10,7 @@ def create_user(email, password):
     if User.query.filter(User.email == email).first():
         return None
     user = user_datastore.create_user(email=email, 
-                          password=encrypt_password(password))
+                          password=hashlib.sha512(password).hexdigest())
     db.session.commit()
     return user
 

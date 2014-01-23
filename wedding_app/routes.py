@@ -1,11 +1,13 @@
 from wedding_app import app, db
 from flask import flash, url_for, render_template, g, request, redirect, session
-from flask.ext.security import login_required, current_user, login_user
-from flask.ext.security.utils import verify_password, encrypt_password
+from flask.ext.security import login_required, current_user
+from flask.ext.security.utils import verify_password, encrypt_password, \
+                                     login_user, logout_user
 from flask.ext.security.forms import RegisterForm, LoginForm
 from models import User
 import db_utilities
 import pdb
+import hashlib
 
 @app.before_request
 def before_request():
@@ -37,12 +39,15 @@ def handle_login():
     possible_match = User.query.filter(User.email == form.email.data).first()
     
     #store verify_password in variable so I can step into function with pdb
-    pdb.set_trace()
-    login_successful = verify_password(form.password.data, 
-                                       possible_match.password)
-    if login_successful:
+    if hashlib.sha512(form.password.data).hexdigest() \
+                            == possible_match.password:
         login_user(possible_match)    
         return redirect('/home')
     else:
         flash('Login invalid')
         return redirect('/login')
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
