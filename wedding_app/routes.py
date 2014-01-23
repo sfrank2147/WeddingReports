@@ -1,7 +1,7 @@
 from wedding_app import app, db
 from flask import flash, url_for, render_template, g, request, redirect, session
 from flask.ext.security import login_required, current_user, login_user
-from flask.ext.security.utils import verify_password
+from flask.ext.security.utils import verify_password, encrypt_password
 from flask.ext.security.forms import RegisterForm, LoginForm
 from models import User
 import db_utilities
@@ -25,6 +25,7 @@ def handle_register():
     else:
         result = db_utilities.create_user(form.email.data, form.password.data)
         if result:
+            flash('Registered Successfuly!')
             return redirect('/login')
         else:
             flash('Username already taken')
@@ -34,7 +35,12 @@ def handle_register():
 def handle_login():
     form = LoginForm(request.form)
     possible_match = User.query.filter(User.email == form.email.data).first()
-    if verify_password(form.password.data, possible_match.password):
+    
+    #store verify_password in variable so I can step into function with pdb
+    pdb.set_trace()
+    login_successful = verify_password(form.password.data, 
+                                       possible_match.password)
+    if login_successful:
         login_user(possible_match)    
         return redirect('/home')
     else:

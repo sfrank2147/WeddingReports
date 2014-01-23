@@ -8,10 +8,8 @@ def create_user(email, password):
     #prevent duplicate emails
     if User.query.filter(User.email == email).first():
         return None
-    pdb.set_trace()
     user = user_datastore.create_user(email=email, 
-                          password=bcrypt.hashpw(password,
-                          app.config['SECURITY_PASSWORD_SALT']))
+                          password=encrypt_password(password))
     db.session.commit()
     return user
 
