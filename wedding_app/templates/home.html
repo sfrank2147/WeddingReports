@@ -6,8 +6,8 @@
 
 {% block content %}
 {% if user and user.email %}
-Logged in as {{ user.email }}.
+<div id="login-status">Logged in as {{ user.email }}.</div>
 {% else %}
-Not logged in.
+<div id="login-status">Not logged in.</div>
 {% endif %}
 {% endblock %}
