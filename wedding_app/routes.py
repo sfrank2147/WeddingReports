@@ -4,7 +4,8 @@ from flask.ext.security import login_required, current_user
 from flask.ext.security.utils import verify_password, encrypt_password, \
                                      login_user, logout_user
 from flask.ext.security.forms import RegisterForm, LoginForm
-from models import User
+from forms import AddReportForm
+from models import User, Venue, Report
 import db_utilities
 import pdb
 import hashlib
@@ -16,7 +17,8 @@ def before_request():
 @app.route('/')
 @app.route('/home')
 def home():
-    return render_template('home.html', user=g.user)
+    form = AddReportForm()
+    return render_template('home.html', user=g.user, form=form)
 
 @app.route('/handle-register',methods=['POST'])
 def handle_register():
@@ -47,6 +49,29 @@ def handle_login():
         flash('Login invalid')
         return redirect('/login')
 
+@login_required
+@app.route('/add-review', methods=['POST'])
+def add_report():
+    form = AddReportForm(request.form)
+    if form.venue_name.data == '':
+        flash('Please fill in venue name.')
+    else:
+        name = db_utilities.standardize_venue_name(form.venue_name.data)
+        #check if venue already exists
+        venue = Venue.query.filter(Venue.name == name).first()
+        if venue is None:
+            venue = Venue(name=name)
+            db.session.add(venue)
+            db.session.commit()
+        rating = db_utilities.standardize_rating()
+        report = Report(venue_id=venue.id, user_id=g.user.id,
+                        content=form.content.data, rating=rating)
+        db.session.add(report)
+        db.session.commit()
+        flash('Successfully submitted report for {}'.format(venue.name))
+            
+    return redirect(url_for('home'))
+    
 @app.route('/logout', methods=['GET'])
 def logout():
     logout_user()

@@ -20,6 +20,8 @@ class User(db.Model):
     roles = db.relationship('Role', secondary=roles_users,
                             backref = db.backref('users',lazy='dynamic'))
     
+    reports = db.relationship('Report', backref='user')
+    
     #methods required by flask-login
     def is_authenticated(self):
         return True
@@ -32,3 +34,15 @@ class User(db.Model):
     
     def get_id(self):
         return unicode(self.id)
+
+class Venue(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    reports = db.relationship('Report', backref='venue')
+
+class Report(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(1400))
+    rating = db.Column(db.Integer)
+    venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
