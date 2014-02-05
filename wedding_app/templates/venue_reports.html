@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block title %}
+<title>Venue Reports</title>
+{% endblock %}
+
+{% block content %}
+{% if not venues %}
+No results for that venue name :-(
+{% else %}
+{% for venue in venues %}
+	<h2>{{ venue[0] }}
+	{% for report in venue[1] %}
+		<h4>Rating: {{ report.rating }}/10</h2>
+		<p> {{ report.content }}
+	{% endfor %}
+{% endfor %}
+{% endif %}
+{% endblock %}
+

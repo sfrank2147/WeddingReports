@@ -6,3 +6,6 @@ class AddReportForm(Form):
     venue_name = TextField('venue_name')
     content = TextAreaField('content')
     rating = IntegerField('rating')
+
+class SearchForm(Form):
+    venue_name = TextField('venue_name')

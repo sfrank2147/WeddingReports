@@ -4,7 +4,7 @@ from flask.ext.security import login_required, current_user
 from flask.ext.security.utils import verify_password, encrypt_password, \
                                      login_user, logout_user
 from flask.ext.security.forms import RegisterForm, LoginForm
-from forms import AddReportForm
+from forms import AddReportForm, SearchForm
 from models import User, Venue, Report
 import db_utilities
 import pdb
@@ -18,7 +18,8 @@ def before_request():
 @app.route('/home')
 def home():
     form = AddReportForm()
-    return render_template('home.html', user=g.user, form=form)
+    search_form = SearchForm()
+    return render_template('home.html', user=g.user, form=form, search_form = search_form)
 
 @app.route('/handle-register',methods=['POST'])
 def handle_register():
@@ -97,9 +98,25 @@ def user_reports():
             report_dict['content'] = report.content
             reports.append(report_dict)
 	
-	return render_template('user_reports.html', reports=reports)
+	return render_template('user_reports.html', reports=reports, search_form = SearchForm())
     
-    
+@app.route('/search-venues', methods=['POST'])
+def search_venues():
+    '''
+    Called when a user searches for a venue
+    Gives back all the reports about that venue
+    '''
+    form = SearchForm(request.form)
+    venues = Venue.query.filter(Venue.name.ilike(form.venue_name.data))
+    if not venues.first():
+        venue_results = None
+    else:
+        venue_results = []
+        for venue in venues:
+            db_reports = Report.query.filter(Report.venue_id == venue.id)
+            venue_results.append((venue.name, db_reports))
+    return render_template('venue_reports.html', venues=venue_results, search_form = SearchForm())
+
 @app.route('/logout', methods=['GET'])
 def logout():
     logout_user()
