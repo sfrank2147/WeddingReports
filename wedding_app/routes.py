@@ -40,8 +40,12 @@ def handle_login():
     form = LoginForm(request.form)
     possible_match = User.query.filter(User.email == form.email.data).first()
     
+    if not possible_match:
+        flash('Login invalid')
+        return redirect('/login')
+    
     #store verify_password in variable so I can step into function with pdb
-    if hashlib.sha512(form.password.data).hexdigest() \
+    elif hashlib.sha512(form.password.data).hexdigest() \
                             == possible_match.password:
         login_user(possible_match)    
         return redirect('/home')
@@ -63,7 +67,7 @@ def add_report():
             venue = Venue(name=name)
             db.session.add(venue)
             db.session.commit()
-        rating = db_utilities.standardize_rating()
+        rating = db_utilities.standardize_rating(form.rating.data)
         report = Report(venue_id=venue.id, user_id=g.user.id,
                         content=form.content.data, rating=rating)
         db.session.add(report)
@@ -71,6 +75,30 @@ def add_report():
         flash('Successfully submitted report for {}'.format(venue.name))
             
     return redirect(url_for('home'))
+
+#viewing reports
+@login_required
+@app.route('/user-reports', methods=['GET'])
+def user_reports():
+    ''' 
+    creates page that displays the current user's reports
+    must create a list of dictionary objects that pass required info to html
+    '''
+    user_reports = Report.query.filter(Report.user_id == g.user.id)
+    if not user_reports.first():
+        reports = None
+    else:
+        reports = []
+        for report in user_reports:
+            report_dict = {}
+            report_dict['venue_name'] = Venue.query.filter(
+	                            Venue.id == report.venue_id).first().name
+            report_dict['rating'] = report.rating
+            report_dict['content'] = report.content
+            reports.append(report_dict)
+	
+	return render_template('user_reports.html', reports=reports)
+    
     
 @app.route('/logout', methods=['GET'])
 def logout():

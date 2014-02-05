@@ -17,6 +17,7 @@
                 <li><a href="{{ url_for('home') }}">Home</a></li>
                 {% if g.user.is_authenticated() %}
                 <li><a id="logout" href="{{ url_for('logout') }}">Log Out</a></li>
+                <li><a id="user_reports" href="{{ url_for('user_reports') }}">My Reports</a></li>
 				{% else %}
                 <li><a id="login" href="/login">Log In</a></li>
                 <li><a href="/register">Register</a></li>
