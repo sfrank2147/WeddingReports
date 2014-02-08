@@ -6,6 +6,7 @@ from flask.ext.security.utils import verify_password, encrypt_password, \
 from flask.ext.security.forms import RegisterForm, LoginForm
 from forms import AddReportForm, SearchForm
 from models import User, Venue, Report
+from flask_wtf import csrf
 import db_utilities
 import pdb
 import hashlib
@@ -18,8 +19,7 @@ def before_request():
 @app.route('/home')
 def home():
     form = AddReportForm()
-    search_form = SearchForm()
-    return render_template('home.html', user=g.user, form=form, search_form = search_form)
+    return render_template('home.html', user=g.user, form=form)
 
 @app.route('/handle-register',methods=['POST'])
 def handle_register():
@@ -98,7 +98,7 @@ def user_reports():
             report_dict['content'] = report.content
             reports.append(report_dict)
 	
-	return render_template('user_reports.html', reports=reports, search_form = SearchForm())
+	return render_template('user_reports.html', reports=reports)
     
 @app.route('/search-venues', methods=['POST'])
 def search_venues():
@@ -115,7 +115,7 @@ def search_venues():
         for venue in venues:
             db_reports = Report.query.filter(Report.venue_id == venue.id)
             venue_results.append((venue.name, db_reports))
-    return render_template('venue_reports.html', venues=venue_results, search_form = SearchForm())
+    return render_template('venue_reports.html', venues=venue_results)
 
 @app.route('/logout', methods=['GET'])
 def logout():

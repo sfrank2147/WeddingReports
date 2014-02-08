@@ -24,11 +24,8 @@
                 {% endif %}
 
                 </ul>
-                <form class="navbar-search pull-right" action="{{ url_for('search_venues') }}" method="POST" name="search_venues">
-                	{{ search_form.hidden_tag() }}
-                	Search venues: {{ search_form.venue_name(size=30) }}
-                	<input id="search_submit" type="submit" value="Search">
-                </form>
+                Search venues: <input type="text" id="search_field" name="search_field" size="30">
+                <input id="search_submit" type="submit" value="Search">
             </div>
         </div>
         
@@ -44,11 +41,32 @@
         
         <div id="content" class="container">
         {% block content %}
+        <div id="search_results"></div>
         {% endblock %}
         </div>
         
         <script src="{{ url_for('static',filename='js/jquery.js') }}"></script>
         <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+        
+                        	
+		<script>
+		$("#search_submit").click(function(event) {
+			event.preventDefault();
+			$.post(
+			'{{ url_for("search_venues") }}',
+			
+			{
+			venue_name: $('#search_field').val()},
+			
+			function(results) { $('#content').html(results); }
+			);
+		});
+		$('#search_field').keypress(function(e) {
+			if(e.which == 13) {
+				$('#search_submit').click();
+			}
+		});
+		</script>
 
     </body>
 </html>
