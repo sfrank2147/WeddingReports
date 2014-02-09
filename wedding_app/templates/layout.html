@@ -24,8 +24,10 @@
                 {% endif %}
 
                 </ul>
+                <div id="search-area">
                 Search venues: <input type="text" id="search_field" name="search_field" size="30">
                 <input id="search_submit" type="submit" value="Search">
+                </div>
             </div>
         </div>
         
@@ -41,7 +43,6 @@
         
         <div id="content" class="container">
         {% block content %}
-        <div id="search_results"></div>
         {% endblock %}
         </div>
         
@@ -58,6 +59,7 @@
 			{
 			venue_name: $('#search_field').val()},
 			
+			//on success, display the search results in the content div
 			function(results) { $('#content').html(results); }
 			);
 		});

@@ -1,3 +1,12 @@
 .flashed-message {
     color:red;
 }
+
+.container {
+	width: 100%;
+}
+
+#search-area {
+	padding-right: 20px;
+	float:right;
+}
