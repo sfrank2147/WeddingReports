@@ -11,7 +11,7 @@
 <form action="{{ url_for('add_report') }}" method="post" name="add_report">
 {{ form.hidden_tag() }}
 <p>Venue name: {{ form.venue_name(size=40) }} <br><p>
-<p>Rating (from 1 to 10): {{ form.rating(size=10) }} <br></p>
+<p>Rating (from 1 to 10): {{ form.rating(size=1) }} <br></p>
 <p>Review: {{ form.content(cols="40",rows="20") }} <br></p>
 <p><input id="submit" type="submit" value="Submit report."></p>
 </form>
