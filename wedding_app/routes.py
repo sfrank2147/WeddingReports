@@ -114,7 +114,8 @@ def search_venues():
         venue_results = []
         for venue in venues:
             db_reports = Report.query.filter(Report.venue_id == venue.id)
-            venue_results.append((venue.name, db_reports))
+            avg_rating = sum([report.rating for report in db_reports])/float(len([report for report in db_reports]))
+            venue_results.append((venue.name, db_reports, avg_rating))
     return render_template('venue_reports.html', venues=venue_results)
 
 @app.route('/logout', methods=['GET'])
