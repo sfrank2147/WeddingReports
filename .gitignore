@@ -37,3 +37,6 @@ nosetests.xml
 
 #config file
 config.py
+
+#text files I don't want shared
+futurefeatures.txt

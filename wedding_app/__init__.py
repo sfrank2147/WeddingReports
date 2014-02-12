@@ -2,6 +2,7 @@ from flask import Flask, g
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask.ext.security import SQLAlchemyUserDatastore, Security
+import jinja_filters
 
 app = Flask(__name__)
 app.config.from_object('config') #use config.py file
@@ -15,3 +16,6 @@ security = Security(app, user_datastore)
 
 #import after user_datastore
 from wedding_app import routes
+
+#jinja filters
+app.jinja_env.filters['avg_rating'] = jinja_filters.avg_rating
