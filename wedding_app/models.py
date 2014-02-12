@@ -39,6 +39,7 @@ class Venue(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     reports = db.relationship('Report', backref='venue')
+    type = db.Column(db.String(64))
 
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)

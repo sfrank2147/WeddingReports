@@ -1,4 +1,4 @@
-from wedding_app import app
+from wedding_app import app, manager
 
 if __name__ == '__main__':
-    app.run(debug=True)#, use_reloader=False)
+    manager.run()#, use_reloader=False)
