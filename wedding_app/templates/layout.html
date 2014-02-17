@@ -56,8 +56,7 @@
 			$.post(
 			'{{ url_for("search_venues") }}',
 			
-			{
-			venue_name: $('#search_field').val()},
+			{venue_name: $('#search_field').val()},
 			
 			//on success, display the search results in the content div
 			function(results) { $('#content').html(results); }
@@ -66,8 +65,41 @@
 		$('#search_field').keypress(function(e) {
 			if(e.which == 13) {
 				$('#search_submit').click();
+			} 
+			
+			else {
+				show_possible_results($('#search_field').val());
 			}
+			
 		});
+		
+		/* Function to show the possible results for what the user has input */
+		
+		function show_possible_results(partial_string) {
+			//make sure something was passed in
+			if (partial_string == null) {
+				partial_string = $('#search_field').val();
+			}
+			if (partial_string.length < 2) {
+				return;
+			}
+			else {
+				//show results in drop-down menu
+				$.post(
+				    '{{ url_for("search_suggestions") }}',
+				    {search_term: $('#search_field').val()},
+				    
+				    //on success, display each possible result
+				    function(suggestions) {
+				    	var venue_list = suggestions.venue_list;
+				        for(var x = 0; x < venue_list.length; x++) {
+				            alert(venue_list[x]);
+				        }
+				    }
+				);
+			}
+		}
+		
 		</script>
 
     </body>

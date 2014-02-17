@@ -1,5 +1,5 @@
 from wedding_app import app, db
-from flask import flash, url_for, render_template, g, request, redirect, session
+from flask import flash, url_for, render_template, g, request, redirect, session, jsonify
 from flask.ext.security import login_required, current_user
 from flask.ext.security.utils import verify_password, encrypt_password, \
                                      login_user, logout_user
@@ -99,7 +99,9 @@ def user_reports():
             reports.append(report_dict)
 	
 	return render_template('user_reports.html', reports=reports)
-    
+
+#searching functions
+
 @app.route('/search-venues', methods=['POST'])
 def search_venues():
     '''
@@ -116,6 +118,21 @@ def search_venues():
             db_reports = Report.query.filter(Report.venue_id == venue.id)
             venue_results.append((venue.name, db_reports))
     return render_template('venue_reports.html', venues=venue_results)
+
+@app.route('/search-suggestions', methods=['POST'])
+def search_suggestions():
+    '''
+    Returns json list of search suggestion strings
+    
+    Called when a user types in the search bar
+    Brings up a list of suggestions for the user
+    '''
+    matching_venues = Venue.query.filter(Venue.name.ilike(request.form['search_term'] + '%'))
+    venue_names = []
+    for venue in matching_venues:
+        venue_names.append(venue.name)
+    return jsonify(venue_list = venue_names)
+    
 
 @app.route('/logout', methods=['GET'])
 def logout():
