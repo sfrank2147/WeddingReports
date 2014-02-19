@@ -128,10 +128,13 @@ def search_suggestions():
     Brings up a list of suggestions for the user
     '''
     matching_venues = Venue.query.filter(Venue.name.ilike(request.form['search_term'] + '%'))
-    venue_names = []
+    venue_list = []
     for venue in matching_venues:
-        venue_names.append(venue.name)
-    return jsonify(venue_list = venue_names)
+    	venue_dict = {}
+    	venue_dict['name'] = venue.name
+    	venue_dict['id'] = venue.id
+        venue_list.append(venue_dict)
+    return jsonify(venue_list = venue_list)
     
 
 @app.route('/logout', methods=['GET'])

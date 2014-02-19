@@ -48,10 +48,10 @@
         
         <script src="{{ url_for('static',filename='js/jquery.js') }}"></script>
         <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/typeahead.js') }}"</script>
+        <script src="{{ url_for('static', filename='js/typeahead2.js') }}"></script>
         
                         	
-		<script>
+		<script type="text/javascript">
 		$("#search_submit").click(function(event) {
 			event.preventDefault();
 			$.post(
@@ -63,43 +63,42 @@
 			function(results) { $('#content').html(results); }
 			);
 		});
+		
 		$('#search_field').keypress(function(e) {
 			if(e.which == 13) {
 				$('#search_submit').click();
 			} 
-			
-			else {
-				show_possible_results($('#search_field').val());
-			}
-			
 		});
+				
+		//register lookahead for the search bar
 		
-		/* Function to show the possible results for what the user has input */
-		
-		function show_possible_results(partial_string) {
-			//make sure something was passed in
-			if (partial_string == null) {
-				partial_string = $('#search_field').val();
+		$("#search_field").typeahead({
+			onSelect: function(item) {
+				console.log(item);
+			},
+			ajax: {
+				url: "{{ url_for('search_suggestions') }}",
+				timeout: 500,
+				displayField: "name",
+				triggerLength: 2,
+				method: "post",
+				loadingClass: "loading-circle",
+				preDispatch: function (query) {
+					return {
+						search_term: query
+					}
+				},
+				preProcess: function (data) {
+					if (data.success === false) {
+						// Hide the list, there was some error
+						return false;
+					}
+					// We gucci!
+					return data.venue_list;
+				}
 			}
-			if (partial_string.length < 2) {
-				return;
-			}
-			else {
-				//show results in drop-down menu
-				$.post(
-				    '{{ url_for("search_suggestions") }}',
-				    {search_term: $('#search_field').val()},
-				    
-				    //on success, display each possible result
-				    function(suggestions) {
-				    	var venue_list = suggestions.venue_list;
-				        for(var x = 0; x < venue_list.length; x++) {
-				            alert(venue_list[x]);
-				        }
-				    }
-				);
-			}
-		}
+		});		
+
 		
 		</script>
 
