@@ -14,19 +14,18 @@
         <div class="navbar">
             <div class="container">
                 <ul class="nav navbar-nav">
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                {% if g.user.is_authenticated() %}
-                <li><a id="logout" href="{{ url_for('logout') }}">Log Out</a></li>
-                <li><a id="user_reports" href="{{ url_for('user_reports') }}">My Reports</a></li>
-				{% else %}
-                <li><a id="login" href="/login">Log In</a></li>
-                <li><a href="/register">Register</a></li>
-                {% endif %}
-
+                	<li><a href="{{ url_for('home') }}">Home</a></li>
+					{% if g.user.is_authenticated() %}
+						<li><a id="logout" href="{{ url_for('logout') }}">Log Out</a></li>
+						<li><a id="user_reports" href="{{ url_for('user_reports') }}">My Reports</a></li>
+					{% else %}
+						<li><a id="login" href="/login">Log In</a></li>
+						<li><a href="/register">Register</a></li>
+                	{% endif %}
                 </ul>
-                <div id="search-area">
-                Search venues: <input type="text" id="search_field" name="search_field" size="30">
-                <input id="search_submit" type="submit" value="Search">
+                <div id="search-area" class="navbar-form navbar-right">
+					Search venues: <input type="text" id="search_field" name="search_field" size="30">
+					<button id="search_submit" type="submit">Search</button>
                 </div>
             </div>
         </div>

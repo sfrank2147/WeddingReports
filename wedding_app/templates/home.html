@@ -8,12 +8,20 @@
 {% if user and user.email %}
 <div id="login-status">Logged in as {{ user.email }}.</div>
 <h2>Submit a report on your wedding venue!</h2>
-<form action="{{ url_for('add_report') }}" method="post" name="add_report">
+<form action="{{ url_for('add_report') }}" method="post" name="add_report" role="form">
 {{ form.hidden_tag() }}
-<p>Venue name: {{ form.venue_name(size=40) }} <br><p>
-<p>Rating (from 1 to 10): {{ form.rating(size=1) }} <br></p>
-<p>Review: {{ form.content(cols="40",rows="20") }} <br></p>
-<p><input id="submit" type="submit" value="Submit report."></p>
+<div class="form-group">
+<label>Venue name: </label> {{ form.venue_name(size=40) }}
+</div>
+<div class="form-group">
+<label>Rating (from 1 to 10): </label> {{ form.rating(size=1) }}
+</div>
+<div class="form-group">
+<label>Review: </label> {{ form.content(cols="40",rows="10") }}
+</div>
+<div class="form-group">
+<input id="submit" type="submit" value="Submit report.">
+</div>
 </form>
 {% else %}
 <div id="login-status">Not logged in.</div>
